@@ -33,7 +33,7 @@ android {
 //        versionCode = flutter.versionCode
 //        versionName = flutter.versionName
         versionCode = 1 // Update this
-        versionName = "1.1" // Update this
+        versionName = "1.2" // Update this
     }
 
     buildTypes {
