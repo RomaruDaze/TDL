@@ -153,6 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 DropdownButton<String>(
                   value: _filter,
                   icon: const Icon(Icons.check, color: Colors.white),
+                  dropdownColor: Colors.black,
                   onChanged: (String? newValue) {
                     setState(() {
                       _filter = newValue!;
@@ -175,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 DropdownButton<String>(
                   value: _sortOrder,
                   icon: const Icon(Icons.sort, color: Colors.white),
+                  dropdownColor: Colors.black,
                   onChanged: (String? newValue) {
                     setState(() {
                       _sortOrder = newValue!;
