@@ -1,4 +1,4 @@
-# Todo List App
+# TDL : A Simple Todo List App
 
 A simple and intuitive Todo List application built with Flutter. This app allows users to manage their tasks efficiently.
 
