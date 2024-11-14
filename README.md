@@ -34,16 +34,10 @@ To change the app icon, you can follow these steps:
     - For iOS, navigate to `ios/Runner/Assets.xcassets`, delete the existing `Assets.xcassets` folder, and replace it with the new `Assets.xcassets` folder from the downloaded zip.
 
 2. **Using Flutter Launcher Icons Package:**
-    - Open the `pubspec.yaml` file and add the following dependency under `dev_dependencies`:
-      ```yaml
-      flutter_launcher_icons: "^0.13.0"
-      ```
-    - Create an `assets` folder, then create an `icon` folder inside it, and add your `icon.png` file.
-    - Run the following commands in the terminal:
-      ```bash
-      flutter pub get
-      flutter pub run flutter_launcher_icons
-      ```
+    ```
+   @https://www.geeksforgeeks.org/flutter-changing-app-icon/
+   ```
+   
 
 ## Run or Debug the App
 
