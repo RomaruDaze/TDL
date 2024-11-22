@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import '../models/task.dart';
+import '../database/shared_preferences_helper.dart'; // Import the SharedPreferencesHelper
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _filter = 'All';
   String _sortOrder = 'Newest';
   int _emptyAddTaskClickCount = 0; // Counter for empty clicks
+  final SharedPreferencesHelper _prefsHelper = SharedPreferencesHelper(); // Create an instance of SharedPreferencesHelper
 
   @override
   void initState() {
@@ -24,51 +24,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadTasks() async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/tasks.txt');
-
-      if (await file.exists()) {
-        final contents = await file.readAsString();
-        final List<String> taskList = contents.split('\n');
-        setState(() {
-          _tasks.clear();
-          _tasks.addAll(taskList.map((task) {
-            final parts = task.split('|');
-            return Task(title: parts[0], isDone: parts[1] == 'true');
-          }).toList());
-        });
-      } else {
-        debugPrint("File does not exist. Creating a new one.");
-        await file.create();
-      }
-    } catch (e) {
-      debugPrint("Error loading tasks: $e");
-    }
+    final tasks = await _prefsHelper.getTasks(); // Retrieve tasks from SharedPreferences
+    setState(() {
+      _tasks.clear();
+      _tasks.addAll(tasks); // Add retrieved tasks to the list
+    });
   }
 
-  Future<void> _saveTasks() async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/tasks.txt');
-      final List<String> taskList = _tasks.map((task) {
-        return '${task.title}|${task.isDone}';
-      }).toList();
-      await file.writeAsString(taskList.join('\n'));
-      debugPrint("Tasks saved successfully.");
-    } catch (e) {
-      debugPrint("Error saving tasks: $e");
-    }
-  }
-
-  void _addTask() {
+  void _addTask() async {
     if (_controller.text.isNotEmpty) {
-      setState(() {
-        _tasks.add(Task(title: _controller.text));
-        _controller.clear();
-        _saveTasks();
-        _emptyAddTaskClickCount = 0;
-      });
+      final newTask = Task(title: _controller.text);
+      _tasks.add(newTask); // Add to local list
+      await _prefsHelper.saveTasks(_tasks); // Save to SharedPreferences
+      _controller.clear();
+      _loadTasks(); // Reload tasks to reflect the new addition
+      _emptyAddTaskClickCount = 0;
     } else {
       _emptyAddTaskClickCount++;
       if (_emptyAddTaskClickCount >= 10) {
@@ -76,6 +46,42 @@ class _HomeScreenState extends State<HomeScreen> {
         _emptyAddTaskClickCount = 0;
       }
     }
+  }
+
+  void _deleteTask(int index) async {
+    final taskToDelete = _tasks[index];
+    if (taskToDelete.id != null) { // Check if id is not null before using it
+        await _prefsHelper.deleteTask(taskToDelete.id!); // Delete from SharedPreferences
+    } else {
+        // Handle the case where the task ID is null
+        print('Task ID is null for task: ${taskToDelete.title}');
+    }
+    setState(() {
+        _tasks.removeAt(index); // This should remove the task from the local list
+    });
+  }
+
+  void _editTask(int index, String newTitle) async {
+    final taskToEdit = _tasks[index];
+    taskToEdit.title = newTitle;
+    await _prefsHelper.saveTasks(_tasks); // Save updated tasks to SharedPreferences
+    setState(() {
+      _tasks[index] = taskToEdit; // Update the local list
+    });
+  }
+
+  List<Task> get filteredTasks {
+    return _tasks.where((task) {
+      if (_filter == 'Finished') return task.isDone;
+      if (_filter == 'Unfinished') return !task.isDone;
+      return true;
+    }).toList();
+  }
+
+  List<Task> get sortedTasks {
+    return _sortOrder == 'Newest'
+        ? filteredTasks.reversed.toList()
+        : filteredTasks; // Oldest
   }
 
   void _showEasterEggAnimation() {
@@ -96,34 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _deleteTask(int index) {
-    setState(() {
-      _tasks.removeAt(index);
-      _saveTasks();
-    });
-  }
-
-  void _editTask(int index, String newTitle) {
-    setState(() {
-      _tasks[index].title = newTitle;
-      _saveTasks();
-    });
-  }
-
-  List<Task> get filteredTasks {
-    return _tasks.where((task) {
-      if (_filter == 'Finished') return task.isDone;
-      if (_filter == 'Unfinished') return !task.isDone;
-      return true;
-    }).toList();
-  }
-
-  List<Task> get sortedTasks {
-    return _sortOrder == 'Newest'
-        ? filteredTasks.reversed.toList()
-        : filteredTasks; // Oldest
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -136,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             padding: const EdgeInsets.only(left: 10.0, right: 20.0, top: 10.0),
             decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 226, 109, 0),
+              color: Color.fromARGB(255, 16, 46, 54),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black,
@@ -147,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: AppBar(
               title: const Text('TDL'),
-              backgroundColor: const Color.fromARGB(255, 226, 109, 0),
+              backgroundColor: const Color.fromARGB(255, 16, 46, 54),
               foregroundColor: Colors.white,
               actions: [
                 DropdownButton<String>(
@@ -233,12 +211,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: sortedTasks.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(sortedTasks[index].title),
+                      title: Text(
+                        sortedTasks[index].title,
+                        style: TextStyle(
+                          decoration: sortedTasks[index].isDone
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
                       leading: Checkbox(
                         value: sortedTasks[index].isDone,
                         onChanged: (bool? value) {
                           setState(() {
                             sortedTasks[index].isDone = value!;
+                            _editTask(_tasks.indexOf(sortedTasks[index]),
+                                sortedTasks[index].title);
                           });
                         },
                       ),
@@ -290,8 +277,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete),
-                            onPressed: () =>
-                                _deleteTask(_tasks.indexOf(sortedTasks[index])),
+                            onPressed: () {
+                                // Ensure the index is correct
+                                _deleteTask(_tasks.indexOf(sortedTasks[index])); // This should correctly find the index of the task to delete
+                            },
                           ),
                         ],
                       ),
