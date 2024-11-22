@@ -199,7 +199,7 @@ body {
     margin: 0 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1400px) {
     .container {
         width: 90%;
         padding: 10px;
