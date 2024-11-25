@@ -1,4 +1,5 @@
-[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/RomaruDaze/TDL/blob/main/README.md) [![jp](https://img.shields.io/badge/lang-jp-red.svg)](https://github.com/RomaruDaze/TDL/blob/main/README_jp.md) [![cn](https://img.shields.io/badge/lang-cn-green.svg)](https://github.com/RomaruDaze/TDL/blob/main/README_cn.md) [![es](https://img.shields.io/badge/lang-es-yellow.svg)](https://github.com/RomaruDaze/TDL/blob/main/README_es.md)
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/RomaruDaze/TDL/blob/main/README.md) [![jp](https://img.shields.io/badge/lang-jp-red.svg)](https://github.com/RomaruDaze/TDL/blob/main/README.jp.md) [![cn](https://img.shields.io/badge/lang-cn-green.svg)](https://github.com/RomaruDaze/TDL/blob/main/README.cn.md) [![es](https://img.shields.io/badge/lang-es-yellow.svg)](https://github.com/RomaruDaze/TDL/blob/main/README.es.md)
+
 # TDL：一个简单的待办事项应用
 
 欢迎使用 TDL，这是一个简单直观的待办事项应用程序，使用 Flutter 构建。该应用程序允许用户高效管理任务，帮助您保持组织和高效。
@@ -35,9 +36,11 @@ TDL 旨在提供一个用户友好的界面来管理任务。您可以添加、�
 ### 克隆仓库
 
 要克隆仓库，请在终端中运行以下命令：
+
 ```bash
 git clone https://github.com/yourusername/todo-list-app.git
 ```
+
 将 `yourusername` 替换为您的 GitHub 用户名。
 
 ### 编辑应用
@@ -70,17 +73,21 @@ git clone https://github.com/yourusername/todo-list-app.git
 ### 运行或调试应用
 
 要运行或调试应用，请在终端中使用以下命令：
+
 ```bash
 flutter run
 ```
+
 确保您有一个模拟器正在运行或连接了物理设备。
 
 ### 安装依赖
 
 在运行应用之前，请确保安装了所有必要的依赖。在终端中运行以下命令：
+
 ```bash
 flutter pub get
 ```
+
 此命令将获取 `pubspec.yaml` 文件中列出的所有所需包。
 
 ### 在移动设备上安装
