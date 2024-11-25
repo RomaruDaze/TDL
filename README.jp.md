@@ -38,7 +38,7 @@ TDL を始めるには、以下の手順に従ってローカルマシンにプ�
 リポジトリをクローンするには、ターミナルで以下のコマンドを実行します：
 
 ```bash
-git clone https://github.com/yourusername/todo-list-app.git
+git clone https://github.com/yourusername/TDL.git
 ```
 
 `yourusername`をあなたの GitHub ユーザー名に置き換えてください。

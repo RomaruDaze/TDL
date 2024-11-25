@@ -38,7 +38,7 @@ Para comenzar con TDL, sigue las instrucciones a continuación para configurar e
 Para clonar el repositorio, ejecuta el siguiente comando en tu terminal:
 
 ```bash
-git clone https://github.com/yourusername/todo-list-app.git
+git clone https://github.com/yourusername/TDL.git
 ```
 
 Reemplaza `yourusername` con tu nombre de usuario de GitHub.

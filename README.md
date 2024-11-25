@@ -38,7 +38,7 @@ To get started with TDL, follow the instructions below to set up the project on 
 To clone the repository, run the following command in your terminal:
 
 ```bash
-git clone https://github.com/yourusername/todo-list-app.git
+git clone https://github.com/yourusername/TDL.git
 ```
 
 Replace `yourusername` with your GitHub username.

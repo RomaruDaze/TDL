@@ -38,7 +38,7 @@ TDL 旨在提供一个用户友好的界面来管理任务。您可以添加、�
 要克隆仓库，请在终端中运行以下命令：
 
 ```bash
-git clone https://github.com/yourusername/todo-list-app.git
+git clone https://github.com/yourusername/TDL.git
 ```
 
 将 `yourusername` 替换为您的 GitHub 用户名。
